@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>유도 용어 사전</title>
+<style>
+:root{--navy:#14274e;--blue:#1d4ed8;--red:#c0392b;--bg:#f4f6fb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#1f2937;font-family:system-ui,'Apple SD Gothic Neo','Nanum Gothic',sans-serif;line-height:1.6}
+header{background:var(--navy);color:#fff;padding:40px 20px 28px;text-align:center}
+header h1{margin:0 0 6px;font-size:2rem}header p{margin:0;color:#cbd5f0}
+.wrap{max-width:1100px;margin:auto;padding:0 16px}
+.bar{position:sticky;top:0;background:var(--bg);padding:14px 0 10px;z-index:5}
+#q{width:100%;padding:14px 18px;font-size:1.05rem;border:2px solid #b8c3e0;border-radius:12px;outline:none}
+#q:focus{border-color:var(--blue)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tab{border:1px solid #b8c3e0;background:#fff;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:.9rem;color:#1f2937}
+.tab.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+#count{font-size:.9rem;color:#4b5563;margin:8px 0}
+#list{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px;padding-bottom:40px}
+.card{background:#fff;border-radius:14px;box-shadow:0 2px 8px #0001;overflow:hidden}
+.card svg{width:100%;height:auto;display:block;background:linear-gradient(#eaf0ff,#f9fbff)}
+.body{padding:14px 16px 18px}
+.cat{font-size:.75rem;background:#e0e7ff;color:#1e3a8a;padding:2px 9px;border-radius:10px}
+h2{margin:8px 0 0;font-size:1.25rem;color:var(--navy)}
+.jp{color:#4b5563;font-size:.9rem;margin-bottom:6px}
+.body p{margin:4px 0;font-size:.95rem}
+mark{background:#fde68a}
+.empty{grid-column:1/-1;text-align:center;padding:50px;color:#4b5563}
+footer{text-align:center;color:#4b5563;font-size:.8rem;padding:20px}
+body{background-color:#f1ece0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cpath d='M0 0h160v160H0z' fill='none'/%3E%3Cpath d='M0 80h160M80 0v160' stroke='%23d9cfb5' stroke-width='2'/%3E%3Ctext x='40' y='60' font-size='34' fill='%23c9bd9c' fill-opacity='.45' text-anchor='middle' font-family='serif'%3E柔%3C/text%3E%3Ctext x='120' y='140' font-size='34' fill='%23c9bd9c' fill-opacity='.45' text-anchor='middle' font-family='serif'%3E道%3C/text%3E%3C/svg%3E");}
+header{background:linear-gradient(rgba(10,20,50,.86),rgba(10,20,50,.92)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M0 60h120M60 0v120' stroke='%23ffffff' stroke-opacity='.08' stroke-width='2'/%3E%3C/svg%3E");position:relative;overflow:hidden;border-bottom:6px solid #111}
+header::before{content:'柔道';position:absolute;right:3%;top:-20px;font-size:9rem;font-family:serif;color:#fff;opacity:.08;line-height:1}
+header::after{content:'';display:block;width:140px;height:12px;margin:14px auto 0;background:#111;border:2px solid #fff;border-radius:3px}
+.bar{background:rgba(241,236,224,.96)}
+</style></head><body>
+<header><h1>🥋 유도 용어 사전</h1><p>용어·심판 제스처·경기 규칙 · 한글/일본어/로마자/뜻으로 검색하세요</p></header>
+<div class="wrap">
+<div class="bar"><input id="q" type="search" placeholder="🔍 검색어 입력 (예: 업어치기, seoi, 조르기, 20초)" autofocus>
+<div class="tabs" id="tabs"></div></div>
+<div id="count"></div><div id="list"></div></div>
+<footer>그림은 이해를 돕는 단순화된 개념도(파랑=공격자 '도리', 빨강=상대 '우케', 초록=심판). 규칙은 IJF 심판규정(2026.1 판) 기준이며 대회·연령별로 다를 수 있습니다입니다. 실제 기술 동작은 지도자에게 배우세요.</footer>
+<script>
+// pose: [headX,headY,hipX,hipY,hand1X,hand1Y,hand2X,hand2Y,foot1X,foot1Y,foot2X,foot2Y]
+const T='#1d4ed8',U='#c0392b';
+const R='#047857';
+const P=(a,b,c,d)=>[100,35,100,80,a,b,c,d,90,125,110,125];
+const ST=[60,35,60,80,45,68,75,68,50,125,70,125];
+const sh=(p,dx)=>p.map((v,i)=>i%2==0?v+dx:v);
+const D=[
+// 기본
+{k:'기본',ko:'유도',jp:'柔道 / Judo',m:'‘부드러움(柔)의 길(道)’. 1882년 일본의 가노 지고로가 창시한 격투 스포츠로, 힘보다 상대의 힘을 이용해 메치기·굳히기로 겨룹니다.',f:[[T,ST],[U,sh(ST,80)]],c:'서로 마주 서서 시작'},
+{k:'기본',ko:'도복',jp:'柔道着 주도기',m:'유도할 때 입는 옷. 상의·하의·띠로 이루어지며, 잡기 기술을 위해 튼튼한 천으로 만듭니다. 경기에서는 흰색과 파란색 도복을 구분해 입습니다.',f:[[T,ST]],c:'도복 입은 선수'},
+{k:'기본',ko:'띠',jp:'帯 오비',m:'도복을 여미는 허리띠. 색으로 급·단을 나타냅니다(흰→노랑→주황→초록→파랑→갈색→검정). 검은 띠는 단 보유자입니다.',f:[[T,ST]],c:'허리의 띠(급·단 표시)',belt:1},
+{k:'기본',ko:'다다미',jp:'畳',m:'유도 경기장에 까는 매트. 낙법 시 충격을 흡수하도록 만들어졌습니다.',f:[[T,sh(ST,10)],[U,sh(ST,70)]],c:'바닥 매트 위에서 경기'},
+{k:'기본',ko:'경례',jp:'礼 레이',m:'시합·연습의 시작과 끝에 상대에게 예의를 표하는 인사. 유도는 “예에서 시작해 예로 끝난다”고 합니다.',f:[[T,[50,60,60,85,50,95,70,95,50,125,70,125]],[U,[150,60,140,85,150,95,130,95,130,125,150,125]]],c:'서로 허리 숙여 인사'},
+{k:'기본',ko:'잡기(쿠미카타)',jp:'組み方 쿠미카타',m:'상대의 도복 깃과 소매를 잡는 방법과 자세. 유도에서 기술의 시작점이라 ‘잡기 싸움’이 매우 중요합니다.',f:[[T,[60,35,60,80,95,60,95,75,50,125,70,125]],[U,[125,35,125,80,90,60,100,70,115,125,135,125]]],c:'깃(위)·소매(옆)를 잡음'},
+{k:'기본',ko:'낙법',jp:'受身 우케미',m:'넘어질 때 몸을 보호하는 기술(뒤·옆·앞·회전 낙법). 유도 입문 때 가장 먼저 배우며, 팔로 매트를 쳐 충격을 분산합니다.',f:[[U,[40,112,90,115,60,95,50,108,130,105,140,118]]],c:'등을 대고 팔로 매트를 침',arm:1},
+{k:'기본',ko:'무너뜨리기(쿠즈시)',jp:'崩し',m:'기술을 걸기 전에 상대의 균형을 깨뜨리는 동작. 유도 기술의 첫 단계입니다.',f:[[T,sh(ST,-10)],[U,[135,45,115,80,105,65,125,65,100,125,130,125]]],c:'상대를 앞으로 기울임',arrow:[[118,60,95,60]]},
+// 구령·판정
+{k:'심판 구령',ko:'시작',jp:'始め 하지메',m:'심판이 경기 시작을 알리는 구령.',f:[[T,ST],[U,sh(ST,80)]],c:'경기 시작'},
+{k:'심판 구령',ko:'그만',jp:'待て 마테',m:'심판이 경기를 일시 정지시키는 구령. 선수는 즉시 동작을 멈추고 제자리로 돌아갑니다.',f:[[T,ST],[U,sh(ST,80)]],c:'일시 정지'},
+{k:'심판 구령',ko:'그대로',jp:'そのまま 소노마마',m:'‘움직이지 마’라는 뜻. 누운 상태 등에서 자세를 그대로 유지하게 합니다.',f:[[T,[70,100,60,115,85,100,95,112,40,125,25,118]],[U,[130,115,100,118,115,100,90,105,150,105,160,118]]],c:'자세를 유지'},
+{k:'판정',ko:'한판',jp:'一本 이폰',m:'즉시 승부가 결정되는 최고 점수. 상대를 큰 기세와 속도로 거의 등으로 떨어뜨리거나, 굳히기에서 항복(탭)을 받거나 20초간 누르면 얻습니다.',f:[[T,sh(ST,75)],[U,[30,115,80,115,60,100,45,108,120,105,130,118]]],c:'상대의 등이 크게 떨어짐'},
+{k:'판정',ko:'유효',jp:'有効 유코',m:'절반보다 한 단계 낮은 점수. 2025년 규칙 개정으로 부활했습니다. 엉덩방아·등 윗부분·팔꿈치·몸 옆면으로 떨어지는 경우, 누르기 5~9초에 주어집니다. 유효를 아무리 모아도 절반으로 합쳐지지 않습니다.',f:[[T,sh(ST,75)],[U,[30,100,75,112,50,95,40,105,115,98,125,108]]],c:'엉덩이·옆면 등으로 착지'},
+{k:'판정',ko:'절반',jp:'技あり 와자아리',m:'한판에 가까운 기술에 주는 점수. 한판의 4요소(속도·힘·등으로 떨어짐·제어) 중 하나가 부족하거나, 몸 옆면이 어깨선 기준 90도를 넘게 떨어지면 줍니다. 누르기는 10~19초. 절반 2개는 ‘절반승 한판’(와자아리 아와세테 입폰)입니다.',f:[[T,sh(ST,70)],[U,[20,95,75,110,50,90,40,100,115,95,125,105]]],c:'등이 반쯤만 닿음'},
+{k:'판정',ko:'지도',jp:'指導 시도',m:'소극적 경기·규칙 위반에 주는 벌칙. 점수로 계산되지 않으며, 3번째 지도는 반칙패(핫소쿠마케)입니다.',f:[[T,ST],[U,sh(ST,80)]],c:'3회 누적 시 반칙패'},
+// 메치기
+{k:'메치기 기술',ko:'업어치기',jp:'背負投 세오이나게',m:'상대를 등에 업듯이 당겨 올려 앞으로 던지는 기술. 유도를 대표하는 기술입니다.',f:[[T,[80,70,65,88,100,62,105,82,50,125,85,125]],[U,[120,100,80,55,95,70,100,80,50,28,62,22]]],c:'등에 업어 앞으로 넘김',arrow:[[105,40,60,25]]},
+{k:'메치기 기술',ko:'허리후리기',jp:'払腰 하라이고시',m:'상대를 허리에 밀착시켜 다리로 상대의 다리를 쓸어 올려 던지는 기술.',f:[[T,[85,45,70,82,100,65,100,80,65,125,28,100]],[U,[120,55,95,80,100,68,110,75,80,52,55,70]]],c:'뒤로 쓸어올리는 다리',arrow:[[40,88,28,100]]},
+{k:'메치기 기술',ko:'밭다리걸기',jp:'大外刈 오소토가리',m:'상대 뒤쪽에서 다리를 크게 걸어 뒤로 쓰러뜨리는 기술.',f:[[T,[70,35,70,80,90,60,100,60,65,125,115,100]],[U,[115,50,115,90,95,62,100,70,90,110,150,125]]],c:'바깥에서 상대 다리를 걸어 넘김',arrow:[[120,95,150,125]]},
+{k:'메치기 기술',ko:'안뒤축걸기',jp:'大内刈 오우치가리',m:'상대 다리 안쪽을 걸어 뒤로 쓰러뜨리는 기술.',f:[[T,[70,35,70,80,90,60,100,60,60,125,95,110]],[U,[115,50,115,90,95,62,100,70,95,125,135,125]]],c:'안쪽에서 발을 걸어 밀어냄',arrow:[[100,112,120,118]]},
+{k:'메치기 기술',ko:'허벅다리걸기',jp:'内股 우치마타',m:'상대 가랑이 안쪽(허벅다리)을 다리로 쳐올려 던지는 기술.',f:[[T,[75,40,70,82,100,62,100,78,65,125,95,92]],[U,[115,48,100,82,95,62,100,72,100,125,85,60]]],c:'허벅다리를 쳐올림',arrow:[[95,90,115,60]]},
+{k:'메치기 기술',ko:'안다리걸기',jp:'小内刈 코우치가리',m:'상대 발 뒤꿈치 안쪽을 걸어 뒤로 쓰러뜨리는 작은 기술.',f:[[T,[70,35,70,80,90,60,100,60,60,125,90,122]],[U,[115,50,115,90,95,62,100,70,95,125,125,125]]],c:'발 안쪽을 짧게 걸음'},
+{k:'메치기 기술',ko:'어깨로 메치기',jp:'肩車 카타구루마',m:'상대를 어깨 위에 둘러메고 던지는 기술.',f:[[T,[70,70,65,95,95,60,95,78,50,125,85,125]],[U,[105,35,70,52,90,60,100,70,40,30,50,20]]],c:'어깨 위로 들어 올림',arrow:[[100,35,50,22]]},
+{k:'메치기 기술',ko:'배대뒤치기',jp:'巴投 토모에나게',m:'스스로 뒤로 누우며 발바닥으로 상대 배를 받쳐 머리 너머로 던지는 희생기술.',f:[[T,[40,112,60,115,80,95,90,100,100,90,105,98]],[U,[135,50,125,80,90,90,100,95,140,125,110,125]]],c:'누우면서 발로 던짐',arrow:[[125,70,60,65]]},
+// 굳히기
+{k:'굳히기 기술',ko:'누르기',jp:'抑込技 오사에코미와자',m:'상대를 등이 바닥에 닿게 눌러 제압하는 기술. 20초 지속하면 한판, 10초면 절반.',f:[[U,[30,115,80,118,60,100,50,108,120,112,130,118]],[T,[90,100,100,110,60,100,75,108,140,125,125,125]]],c:'위에서 몸으로 누름'},
+{k:'굳히기 기술',ko:'가로누르기',jp:'袈裟固 케사가타메',m:'상대 옆에서 한 팔과 목을 끼고 가슴으로 누르는 대표 누르기.',f:[[U,[30,115,80,118,60,100,50,108,120,112,130,118]],[T,[70,95,100,105,50,100,60,108,125,125,145,118]]],c:'옆에서 목·팔을 안고 누름'},
+{k:'굳히기 기술',ko:'조르기',jp:'絞技 시메와자',m:'도복 깃이나 팔로 상대의 목을 졸라 항복을 받는 기술. 상대가 두드려(탭) 항복하거나 실신하면 한판입니다.',f:[[T,[80,70,90,100,100,80,130,85,110,125,140,125]],[U,[120,60,125,100,115,80,100,85,160,125,140,125]]],c:'팔로 목을 압박'},
+{k:'굳히기 기술',ko:'꺾기',jp:'関節技 칸세쓰와자',m:'상대의 팔 관절(팔꿈치)을 반대로 꺾어 항복을 받는 기술. 유도는 팔꿈치 관절만 허용합니다. 대표 예: 팔가로누워꺾기(암바).',f:[[T,[50,115,70,118,100,100,125,95,110,108,130,118]],[U,[160,100,140,112,120,95,95,98,170,125,155,125]]],c:'팔꿈치 관절 제압',arrow:[[110,95,130,85]]},
+{k:'굳히기 기술',ko:'탭(항복)',jp:'参った 마이타',m:'굳히기에서 손바닥으로 매트나 상대 몸을 두드려 항복 의사를 표시하는 행동. 이때 즉시 기술을 풀어야 합니다.',f:[[U,[40,112,90,115,70,100,50,108,130,105,140,118]]],c:'손으로 매트를 탁탁',arm:1},
+
+// 심판 용어(제스처) / 규칙
+{k:'심판 용어',ko:'한판 선언',jp:'一本 이폰!',m:'한 팔을 머리 위로 높이 들어 올려 선언합니다. 경기는 즉시 끝납니다.',f:[[R,P(110,12,85,68)]],c:'한 팔을 번쩍 위로'},
+{k:'심판 용어',ko:'절반 선언',jp:'技あり 와자아리!',m:'한 팔을 어깨 높이로 옆으로 뻗고 손바닥은 아래로 향합니다. 절반 2개면 ‘와자아리 아와세테 입폰’ 후 한판 제스처를 이어 합니다.',f:[[R,P(145,46,85,68)]],c:'팔을 수평으로'},
+{k:'심판 용어',ko:'유효 선언',jp:'有効 유코!',m:'한 팔을 몸에서 약 45도 아래 옆으로 뻗습니다(손바닥 아래).',f:[[R,P(130,75,85,68)]],c:'팔을 비스듬히 내림'},
+{k:'심판 용어',ko:'누르기 시작',jp:'抑え込み 오사에코미!',m:'누르기 기술이 성립했을 때 상대 쪽으로 몸을 숙여 손바닥을 아래로 향한 채 팔을 뻗어 선언합니다. 이때부터 시간 측정이 시작됩니다(20초 한판 / 10초 절반 / 5초 유효).',f:[[R,[100,50,100,90,130,95,85,78,90,125,110,125]],[U,[160,115,170,118,150,105,160,108,200,125,190,125]]],c:'몸을 숙여 가리킴'},
+{k:'심판 용어',ko:'누르기 풀림',jp:'解けた 도케타!',m:'누르기가 풀렸을 때 손을 펴 엄지를 위로 한 채 좌우로 2~3번 흔듭니다. 시간 측정이 멈춥니다.',f:[[R,P(125,60,85,68)]],c:'손을 좌우로 흔듦'},
+{k:'심판 용어',ko:'그만(마테)',jp:'待て Mate!',m:'한 팔을 어깨 높이로 수평으로 뻗어 손바닥을 기록석에 보입니다. 경기 일시 정지. 다시 시작할 땐 ‘하지메’를 외칩니다.',f:[[R,P(140,45,85,68)]],c:'손바닥을 펴 보임'},
+{k:'심판 용어',ko:'그대로(소노마마)↔계속(요시)',jp:'そのまま / よし',m:'소노마마는 누워 겨루는 중 ‘자세 유지’(양 선수 몸에 손을 댐). 요시는 같은 동작으로 힘주어 눌러 ‘계속’을 뜻합니다. 소노마마는 누워서 겨루는 상황에서만 사용합니다.',f:[[R,[100,55,100,90,140,115,60,115,90,125,110,125]]],c:'두 선수를 손으로 터치'},
+{k:'심판 용어',ko:'그만(경기 종료)',jp:'それまで 소레마데',m:'경기 종료 선언. 한판·절반승 한판·반칙패·기권승, 시간 종료, 골든스코어에서의 득점 시 외칩니다.',f:[[R,P(140,45,85,68)]],c:'경기 끝'},
+{k:'심판 용어',ko:'승자 선언',jp:'勝ち 카치',m:'심판이 승자 쪽으로 한 손을 어깨 위로 올려 가리킵니다.',f:[[R,P(135,25,85,68)]],c:'승자를 가리킴'},
+{k:'심판 용어',ko:'예',jp:'礼 레이',m:'경기 시작·끝에 서로 인사를 시키는 구령. 선수들은 왼발부터 한 걸음 나와 인사하고, 끝나면 오른발부터 물러나 인사합니다. 악수는 하지 않습니다.',f:[[T,[50,60,60,85,50,95,70,95,50,125,70,125]],[U,[150,60,140,85,150,95,130,95,130,125,150,125]]],c:'서로 인사'},
+{k:'규칙',big:'4:00',ko:'경기 시간',jp:'試合時間',m:'성인·주니어·카뎃 모두 4분(실제 경기 시간, 마테 시 시계 정지). 경기 사이 휴식은 선수당 최소 10분.'},
+{k:'규칙',big:'20초',ko:'누르기 시간',jp:'抑込時間',m:'20초=한판, 10~19초=절반, 5~9초=유효. 골든스코어에서는 5초면 유효가 되어 즉시 종료.'},
+{k:'규칙',big:'3지도',ko:'반칙패',jp:'反則負 핫소쿠마케',m:'지도 3번째면 반칙패(상대는 한판승). 위험한 행위(예: 머리부터 떨어뜨리기 등)는 지도 없이 곧바로 반칙패(직접 반칙패)가 될 수 있습니다. 지도는 점수가 되지 않습니다.'},
+{k:'규칙',big:'GS',ko:'골든스코어',jp:'ゴールデンスコア',m:'4분 안에 승부가 안 나면(점수 없음/동점) 휴식 없이 연장. 시간 제한이 없고 유효 이상 점수 또는 반칙패가 나오면 종료. 정규 시간의 지도 수는 연장에도 이어지지만, 정규 시간 동점이면 지도 수와 관계없이 연장에 들어갑니다.'},
+{k:'규칙',big:'白·青',ko:'도복 색',jp:'柔道着',m:'심판 기준 왼쪽이 파란 도복, 오른쪽이 흰 도복. 띠는 엉덩이뼈 위로 단단히 매야 합니다. 마테 사이에 도복·머리를 정돈하지 않으면 지도입니다.'},
+{k:'규칙',big:'4요소',ko:'한판 기준',jp:'一本の基準',m:'①속도 ②힘 ③등으로 떨어짐 ④끝까지 제어. 구르거나 멈추면 점수가 안 되고, 던진 뒤 브릿지(머리와 발로 버티기)는 위험해서 한판입니다.'},
+{k:'규칙',big:'탭 2회',ko:'항복',jp:'参った 마이타',m:'손이나 발로 2회 이상 두드리거나 ‘마이타’라고 말하면 한판. 조르기·꺾기·누르기 어느 상황이든 가능하며, 실신해도 한판입니다.'},
+{k:'규칙',big:'서서 ✕',ko:'서서 조르기·꺾기 금지',jp:'禁止技',m:'선 상태에서 조르기·꺾기를 시도하면 마테 후 지도. 허용 관절은 팔꿈치뿐. 다리 잡기, 가위 조르기(도지메), 카와즈가케 등은 금지 기술입니다.'},
+{k:'규칙',big:'場外',ko:'경기장 밖',jp:'場外',m:'경기 구역에 한 발이라도 걸친 채 시작된 동작은 유효합니다. 두 선수 모두 밖으로 나가면 마테. 밖으로 나가는 지도는 소극적 행동에 부과됩니다.'},
+{k:'규칙',big:'부전·기권',ko:'부전승·기권승',jp:'不戦勝 / 棄権勝',m:'후센가치=상대가 출전하지 않아 얻는 승리. 키켄가치=상대가 부상·기권으로 경기를 계속하지 못해 얻는 승리.'},
+];
+const RO=[['유도','judo'],['도복','judogi gi'],['띠','obi belt'],['다다미','tatami mat'],['경례','rei bow'],['예','rei bow'],['쿠미카타','kumikata kumi-kata grip'],['낙법','ukemi'],['쿠즈시','kuzushi'],['시작','hajime'],['마테','mate matte'],['그만','mate sore-made soremade'],['소노마마','sonomama sono-mama yoshi'],['한판','ippon'],['유효','yuko'],['절반','wazaari waza-ari awasete'],['지도','shido'],['업어치기','seoinage seoi-nage'],['허리후리기','haraigoshi harai-goshi'],['밭다리','osotogari osoto-gari'],['안뒤축','ouchigari ouchi-gari'],['허벅다리','uchimata uchi-mata'],['안다리','kouchigari kouchi-gari'],['어깨로','katagurumA kata-guruma'],['배대뒤치기','tomoenage tomoe-nage'],['누르기','osaekomi osaekomiwaza toketa'],['가로누르기','kesagatame kesa-gatame'],['조르기','shime waza shimewaza choke'],['꺾기','kansetsu waza kansetsuwaza armlock ambar'],['탭','tap maitta'],['항복','tap maitta'],['반칙패','hansokumake hansoku-make'],['골든','golden score gs'],['부전','fusen kiken'],['승자','kachi'],['도케타','toketa']];
+D.forEach(d=>{let r='';RO.forEach(([k,v])=>{if((d.ko+d.jp).includes(k))r+=' '+v});d.s=(d.ko+' '+d.jp+' '+d.m+' '+d.k+' '+(d.c||'')+r).toLowerCase().replace(/[-_]/g,'')});
+const cats=['전체',...new Set(D.map(d=>d.k))];let cat='전체';
+function ln(a,c,w){return `<line x1="${a[0]}" y1="${a[1]}" x2="${a[2]}" y2="${a[3]}" stroke="${c}" stroke-width="${w||5}" stroke-linecap="round"/>`}
+function fig(c,p,belt){const sx=(p[0]*.3+p[2]*.7),sy=(p[1]*.3+p[3]*.7)*0+p[1]+(p[3]-p[1])*.25;
+ let s=`<circle cx="${p[0]}" cy="${p[1]}" r="9" fill="${c}"/>`+ln([p[0],p[1]+9,p[2],p[3]],c,8)+ln([sx,sy,p[4],p[5]],c,5)+ln([sx,sy,p[6],p[7]],c,5)+ln([p[2],p[3],p[8],p[9]],c,6)+ln([p[2],p[3],p[10],p[11]],c,6);
+ if(belt)s+=`<rect x="${p[2]-8}" y="${p[3]-6}" width="16" height="5" fill="#111" rx="2"/>`;return s}
+function svg(d){if(d.big)return `<svg viewBox="0 0 200 150" role="img" aria-label="${d.ko}"><rect width="200" height="150" fill="#14274e"/><text x="100" y="88" text-anchor="middle" font-size="${d.big.length>4?38:52}" font-weight="700" fill="#fbbf24">${d.big}</text><text x="100" y="125" text-anchor="middle" font-size="12" fill="#cbd5f0">${d.jp}</text></svg>`;
+ let s=`<svg viewBox="0 0 200 150" role="img" aria-label="${d.ko} 개념도"><rect x="0" y="128" width="200" height="22" fill="#9bbf8a"/>`;
+ (d.arrow||[]).forEach(a=>s+=`<defs><marker id="m${d.ko.length}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0L6,3L0,6z" fill="#f59e0b"/></marker></defs><line x1="${a[0]}" y1="${a[1]}" x2="${a[2]}" y2="${a[3]}" stroke="#f59e0b" stroke-width="3" stroke-dasharray="5 3" marker-end="url(#m${d.ko.length})"/>`);
+ d.f.forEach(([c,p])=>s+=fig(c,p,d.belt));
+ if(d.arm)s+=`<path d="M52 100 L40 118" stroke="#f59e0b" stroke-width="3"/>`;
+ return s+`<text x="100" y="144" text-anchor="middle" font-size="9" fill="#14274e">${d.c}</text></svg>`}
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function hl(t,q){t=esc(t);const ks=q.split(/\s+/).filter(Boolean).map(k=>esc(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));if(!ks.length)return t;return t.replace(new RegExp(ks.join('|'),'gi'),m=>`<mark>${m}</mark>`)}
+function render(){const q=document.getElementById('q').value.trim().toLowerCase();
+ const tk=q.replace(/[-_]/g,'').split(/\s+/).filter(Boolean);const r=D.filter(d=>(cat=='전체'||d.k==cat)&&tk.every(t=>d.s.includes(t)));
+ document.getElementById('count').textContent=`${r.length}개 용어`;
+ document.getElementById('list').innerHTML=r.length?r.map(d=>`<article class="card">${svg(d)}<div class="body"><span class="cat">${d.k}</span><h2>${hl(d.ko,q)}</h2><div class="jp">${hl(d.jp,q)}</div><p>${hl(d.m,q)}</p></div></article>`).join(''):'<div class="empty">검색 결과가 없습니다. 다른 단어로 찾아보세요.</div>'}
+const tb=document.getElementById('tabs');
+cats.forEach(c=>{const b=document.createElement('button');b.className='tab'+(c==cat?' on':'');b.textContent=c;b.onclick=()=>{cat=c;[...tb.children].forEach(x=>x.classList.toggle('on',x==b));render()};tb.appendChild(b)});
+['input','keyup','change','search','compositionend'].forEach(e=>document.getElementById('q').addEventListener(e,render));render();
+</script></body></html>
